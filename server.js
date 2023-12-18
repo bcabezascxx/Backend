@@ -1025,16 +1025,25 @@ const corsOptions ={
 };
 
 async function startServer(){
+    const app = express();
+    app.use(cors());
+    
     const apolloServer = new ApolloServer({typeDefs, resolvers, context: ({req, res}) => ({req,res}),corsOptions});
     await apolloServer.start();
 
-    apolloServer.applyMiddleware({app,path: '/api/graphql',cors: false});
+    apolloServer.applyMiddleware({app,cors: false});
+
+    const PORT = process.env.PORT || 8090; // Asegúrate de tener un valor predeterminado para el puerto si no está definido en el entorno
+
+    app.listen(PORT, function () {
+        console.log(`Servidor iniciado en el puerto ${PORT}`);
+    });
 }
 
 startServer();
 
-const app = express();
-app.use(cors());
+
+
 
 
 
